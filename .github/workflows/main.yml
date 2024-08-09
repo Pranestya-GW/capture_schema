@@ -33,11 +33,19 @@ jobs:
       # Step 5: Commit generated files
       - name: Commit generated files
         run: |
-          git config --local user.name "GitHub Actions"
-          git config --local user.email "actions@github.com"
-          git add generated/*
-          git commit -m "Update generated schema files" || echo "No changes to commit"
-          git push
+         git config --local user.name "GitHub Actions"
+         git config --local user.email "actions@github.com"
+         git checkout -b schema-update-branch
+         git add generated/*
+         git commit -m "Update generated schema files" || echo "No changes to commit"
+       
+       # Fetch latest changes from the remote main branch
+         git fetch origin main
+       # Rebase the current branch on top of main
+         git rebase origin/main
+       # Push the changes
+         git push origin schema-update-branch
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          
+
+
