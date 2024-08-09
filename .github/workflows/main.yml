@@ -14,7 +14,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Step 2: Run Docker container with the script
+      # Step 2: Ensure the script is executable
+      - name: Make script executable
+        run: chmod +x ./generate_schema.sh
+
+      # Step 3: Run Docker container with the script
       - name: Run SchemaSpy in Docker
         env:
           DB_HOST: ${{ secrets.DB_HOST }}
@@ -31,9 +35,9 @@ jobs:
             -e DB_PASS="${{ secrets.DB_PASS }}" \
             -v ${{ github.workspace }}:/workspace \
             anytyng123/java-graphviz-image:latest \
-            /bin/bash /workspace/generate_schema.sh
+            /bin/sh /workspace/generate_schema.sh
 
-      # Step 3: Commit generated files
+      # Step 4: Commit generated files
       - name: Commit generated files
         run: |
           git config --local user.name "GitHub Actions"
