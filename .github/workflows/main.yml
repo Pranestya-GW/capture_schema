@@ -16,13 +16,17 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Step 2: Make the script executable
+      # Step 2: Install dependencies
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y default-jre graphviz
+
+      # Step 3: Make the script executable
       - name: Make script executable
         run: chmod +x ./generate_schema.sh
-        # If your script is in a different folder, update the path:
-        # run: chmod +x ./scripts/generate_schema.sh
 
-      # Step 3: Run the script
+      # Step 4: Run the script
       - name: Run SchemaSpy script
         env:
           DB_HOST: ${{ secrets.DB_HOST }}
@@ -31,5 +35,3 @@ jobs:
           DB_USER: ${{ secrets.DB_USER }}
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
         run: ./generate_schema.sh
-        # If your script is in a different folder, update the path:
-        # run: ./scripts/generate_schema.sh
