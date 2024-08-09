@@ -34,7 +34,14 @@ jobs:
           DB_PASS: ${{ secrets.DB_PASS }}
         run: ./generate_schema.sh
 
-      # Step 5: Commit generated files
+      # Step 5: Delete older directories in the repository
+      - name: Delete older schema directories
+        run: |
+          cd generated
+          ls -dt */ | tail -n +8 | xargs rm -rf
+        continue-on-error: true
+
+      # Step 6: Commit generated files
       - name: Commit generated files
         run: |
           git config --local user.name "GitHub Actions"
