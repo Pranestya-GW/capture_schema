@@ -14,27 +14,27 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Step 2: Install dependencies
-      - name: Install dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y default-jre graphviz
-
-      # Step 3: Make the script executable
-      - name: Make script executable
-        run: chmod +x ./generate_schema.sh
-
-      # Step 4: Run the script
-      - name: Run SchemaSpy script
+      # Step 2: Run SchemaSpy using Docker
+      - name: Run SchemaSpy script in Docker
         env:
           DB_HOST: ${{ secrets.DB_HOST }}
           DB_PORT: ${{ secrets.DB_PORT }}
           DB_NAME: ${{ secrets.DB_NAME }}
           DB_USER: ${{ secrets.DB_USER }}
           DB_PASS: ${{ secrets.DB_PASS }}
-        run: ./generate_schema.sh
+        run: |
+          docker pull anytyng123/java-graphviz-image:latest
+          docker run --rm \
+            -e DB_HOST="${{ secrets.DB_HOST }}" \
+            -e DB_PORT="${{ secrets.DB_PORT }}" \
+            -e DB_NAME="${{ secrets.DB_NAME }}" \
+            -e DB_USER="${{ secrets.DB_USER }}" \
+            -e DB_PASS="${{ secrets.DB_PASS }}" \
+            -v ${{ github.workspace }}:/workspace \
+            anytyng123/java-graphviz-image:latest \
+            bash -c "mkdir -p /workspace/generated && /workspace/generate_schema.sh"
 
-      # Step 5: Commit generated files
+      # Step 3: Commit generated files
       - name: Commit generated files
         run: |
           git config --local user.name "GitHub Actions"
