@@ -34,20 +34,20 @@ jobs:
           DB_PASS: ${{ secrets.DB_PASS }}
         run: ./generate_schema.sh
 
-      # Step 5: Delete older directories in the repository
-      - name: Delete older schema directories
+      # Step 5: Delete older directories from the repository
+      - name: Delete older schema directories from repository
         run: |
           cd generated
-          ls -dt */ | tail -n +8 | xargs rm -rf
-        continue-on-error: true
+          ls -dt */ | tail -n +8 | xargs -I {} git rm -r {}
+        continue-on-error: false
 
-      # Step 6: Commit generated files
-      - name: Commit generated files
+      # Step 6: Commit changes to the repository
+      - name: Commit and push changes
         run: |
           git config --local user.name "GitHub Actions"
           git config --local user.email "actions@github.com"
-          git add generated/*
-          git commit -m "Update generated schema files" || echo "No changes to commit"
+          git add .
+          git commit -m "Update generated schema files and clean up old backups" || echo "No changes to commit"
           git push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
