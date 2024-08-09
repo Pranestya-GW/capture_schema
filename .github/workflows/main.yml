@@ -1,38 +1,35 @@
-#!/bin/bash
+# .github/workflows/main.yml
 
-# Define variables
-SCHEMASPY_JAR="${GITHUB_WORKSPACE}/schemaspy-6.2.4.jar"
-JDBC_DRIVER="${GITHUB_WORKSPACE}/postgresql.jar"
-BASE_OUTPUT_DIR="${GITHUB_WORKSPACE}/generated"
-LOG_FILE="${GITHUB_WORKSPACE}/schemaspy.log"
+name: Generate Database Schema
 
-# Use environment variables for database credentials
-DB_HOST="${DB_HOST}"
-DB_PORT="${DB_PORT}"
-DB_NAME="${DB_NAME}"
-DB_USER="${DB_USER}"
-DB_PASSWORD="${DB_PASSWORD}"
+on:
+  push:
+    branches:
+      - main
 
-# Ensure output directory exists
-mkdir -p $BASE_OUTPUT_DIR
+jobs:
+  generate-schema:
+    runs-on: ubuntu-latest
 
-# Rotate old backups to keep only the last 7
-cd $BASE_OUTPUT_DIR
-ls -dt */ | tail -n +7 | xargs rm -rf
+    steps:
+      # Step 1: Checkout the repository
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-# Generate new output directory with timestamp
-TIMESTAMP=$(date +"%Y-%m-%d-%H:%M")
-NEW_OUTPUT_DIR="${BASE_OUTPUT_DIR}/${TIMESTAMP}"
-mkdir -p $NEW_OUTPUT_DIR
+      # Step 2: Make the script executable
+      - name: Make script executable
+        run: chmod +x ./generate_schema.sh
+        # If your script is in a different folder, update the path:
+        # run: chmod +x ./scripts/generate_schema.sh
 
-# Run SchemaSpy
-java -jar $SCHEMASPY_JAR -t pgsql -dp $JDBC_DRIVER -host $DB_HOST -port $DB_PORT -db $DB_NAME -u $DB_USER -p $DB_PASSWORD -s public -o $NEW_OUTPUT_DIR > $LOG_FILE 2>&1
-
-# Check if SchemaSpy ran successfully
-if [ $? -ne 0 ]; then
-    echo "SchemaSpy failed to run" >> $LOG_FILE
-    exit 1
-fi
-
-# Log successful completion
-echo "SchemaSpy completed successfully at $(date +"%Y-%m-%d %H:%M:%S")" >> $LOG_FILE
+      # Step 3: Run the script
+      - name: Run SchemaSpy script
+        env:
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_PORT: ${{ secrets.DB_PORT }}
+          DB_NAME: ${{ secrets.DB_NAME }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+        run: ./generate_schema.sh
+        # If your script is in a different folder, update the path:
+        # run: ./scripts/generate_schema.sh
