@@ -1,16 +1,17 @@
 #!/bin/bash
 
-# Define variables using environment variables passed by GitHub Actions
+# Define database credentials
+DB_HOST="aws-0-ap-southeast-1.pooler.supabase.com"
+DB_PORT="6543"
+DB_NAME="postgres"
+DB_USER="postgres.rssagmjvvmxlxalvgdbk"
+DB_PASS="krylliac123"
+
+# Define other variables
 SCHEMASPY_JAR="${GITHUB_WORKSPACE}/schemaspy-6.2.4.jar"
 JDBC_DRIVER="${GITHUB_WORKSPACE}/postgresql.jar"
 BASE_OUTPUT_DIR="${GITHUB_WORKSPACE}/generated"
 LOG_FILE="${GITHUB_WORKSPACE}/schemaspy.log"
-
-DB_HOST="${DB_HOST}"
-DB_PORT="${DB_PORT}"
-DB_NAME="${DB_NAME}"
-DB_USER="${DB_USER}"
-DB_PASS="${DB_PASS}"
 
 # Ensure output directory exists
 mkdir -p $BASE_OUTPUT_DIR
