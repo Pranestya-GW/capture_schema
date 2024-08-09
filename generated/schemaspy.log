@@ -12,9 +12,9 @@ SchemaSpy comes with ABSOLUTELY NO WARRANTY.
 SchemaSpy is free software and can be redistributed under the conditions of LGPL version 3 or later.
 http://www.gnu.org/licenses/
 
-INFO  - Starting Main v6.2.4 on fv-az1148-150 with PID 4054 (/home/runner/work/capture_schema/capture_schema/schemaspy-6.2.4.jar started by runner in /home/runner/work/capture_schema/capture_schema/generated)
+INFO  - Starting Main v6.2.4 on fv-az1110-336 with PID 4062 (/home/runner/work/capture_schema/capture_schema/schemaspy-6.2.4.jar started by runner in /home/runner/work/capture_schema/capture_schema)
 INFO  - The following profiles are active: default
-INFO  - Started Main in 1.281 seconds (JVM running for 1.829)
+INFO  - Started Main in 1.176 seconds (JVM running for 1.751)
 INFO  - Starting schema analysis
 INFO  - Connected to PostgreSQL - 15.6
 INFO  - Gathering schema details
@@ -38,10 +38,10 @@ INFO  - Writing/diagramming details
 ERROR - dot -Tpng:cairo tgl.1degree.dot -otgl.1degree.png -Tcmapx: Warning: cell size too small for content
 ERROR - dot -Tpng:cairo tgl.1degree.dot -otgl.1degree.png -Tcmapx: in label of node tgl
 .(0sec)
-Wrote relationship details of 1 tables/views to directory '/home/runner/work/capture_schema/capture_schema/generated/2024-08-09-22:43' in 6 seconds.
-View the results by opening /home/runner/work/capture_schema/capture_schema/generated/2024-08-09-22:43/index.html
+Wrote relationship details of 1 tables/views to directory '/home/runner/work/capture_schema/capture_schema/generated/2024-08-09-22:55' in 6 seconds.
+View the results by opening /home/runner/work/capture_schema/capture_schema/generated/2024-08-09-22:55/index.html
 INFO  - Wrote table details in 0 seconds
-INFO  - Wrote relationship details of 1 tables/views to directory '/home/runner/work/capture_schema/capture_schema/generated/2024-08-09-22:43' in 6 seconds.
-INFO  - View the results by opening /home/runner/work/capture_schema/capture_schema/generated/2024-08-09-22:43/index.html
+INFO  - Wrote relationship details of 1 tables/views to directory '/home/runner/work/capture_schema/capture_schema/generated/2024-08-09-22:55' in 6 seconds.
+INFO  - View the results by opening /home/runner/work/capture_schema/capture_schema/generated/2024-08-09-22:55/index.html
 INFO  - StackTraces have been omitted, use `-debug` when executing SchemaSpy to see them
-SchemaSpy completed successfully at 2024-08-09 22:43:24
+SchemaSpy completed successfully at 2024-08-09 22:55:46
