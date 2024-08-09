@@ -1,17 +1,26 @@
 #!/bin/bash
 
-# Define database credentials
-DB_HOST="aws-0-ap-southeast-1.pooler.supabase.com"
-DB_PORT="6543"
-DB_NAME="postgres"
-DB_USER="postgres.rssagmjvvmxlxalvgdbk"
-DB_PASS="krylliac123"
-
-# Define other variables
+# Define variables
 SCHEMASPY_JAR="${GITHUB_WORKSPACE}/schemaspy-6.2.4.jar"
 JDBC_DRIVER="${GITHUB_WORKSPACE}/postgresql.jar"
 BASE_OUTPUT_DIR="${GITHUB_WORKSPACE}/generated"
 LOG_FILE="${GITHUB_WORKSPACE}/schemaspy.log"
+
+# Define database connection parameters
+DB_HOST="aws-0-ap-southeast-1.pooler.supabase.com"
+DB_PORT="6543"
+DB_NAME="postgres"
+DB_USER="postgres.rssagmjvvmvlxalvgdbk"
+DB_PASS="krylliac123"
+
+# Test database connection
+echo "Testing database connection..."
+if ! psql -h $DB_HOST -p $DB_PORT -d $DB_NAME -U $DB_USER -c '\q'; then
+    echo "Failed to connect to the database. Please check your credentials and network connection." >> $LOG_FILE
+    exit 1
+fi
+
+echo "Database connection successful."
 
 # Ensure output directory exists
 mkdir -p $BASE_OUTPUT_DIR
@@ -35,7 +44,7 @@ TIMESTAMP=$(date +"%Y-%m-%d-%H:%M")
 NEW_OUTPUT_DIR="${BASE_OUTPUT_DIR}/${TIMESTAMP}"
 mkdir -p $NEW_OUTPUT_DIR
 
-# Run SchemaSpy
+# Run SchemaSpy with hardcoded credentials
 java -jar $SCHEMASPY_JAR -t pgsql -dp $JDBC_DRIVER -host $DB_HOST -port $DB_PORT -db $DB_NAME -u $DB_USER -p $DB_PASS -s public -o $NEW_OUTPUT_DIR > $LOG_FILE 2>&1
 
 # Check if SchemaSpy ran successfully
