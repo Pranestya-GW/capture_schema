@@ -4,7 +4,14 @@
 SCHEMASPY_JAR="${GITHUB_WORKSPACE}/schemaspy-6.2.4.jar"
 JDBC_DRIVER="${GITHUB_WORKSPACE}/postgresql.jar"
 BASE_OUTPUT_DIR="${GITHUB_WORKSPACE}/generated"
-LOG_FILE="${BASE_OUTPUT_DIR}/schemaspy.log"  # Updated log file location
+LOG_FILE="${BASE_OUTPUT_DIR}/schemaspy.log"  # Log file location
+
+# Define database connection parameters from environment variables
+DB_HOST="$DB_HOST"
+DB_PORT="$DB_PORT"
+DB_NAME="$DB_NAME"
+DB_USER="$DB_USER"
+DB_PASS="$DB_PASS"
 
 # Set the PGPASSWORD environment variable using the repository variable
 export PGPASSWORD="$DB_PASS"
