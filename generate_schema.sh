@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# Install dependencies
+sudo apt-get update
+sudo apt-get install -y default-jre graphviz postgresql-client
+
 # Define variables
 SCHEMASPY_JAR="${GITHUB_WORKSPACE}/schemaspy-6.2.4.jar"
 JDBC_DRIVER="${GITHUB_WORKSPACE}/postgresql.jar"
@@ -12,6 +16,9 @@ DB_PORT="6543"
 DB_NAME="postgres"
 DB_USER="postgres.rssagmjvvmvlxalvgdbk"
 DB_PASS="krylliac123"
+
+# Set the PGPASSWORD environment variable
+export PGPASSWORD="$DB_PASS"
 
 # Test database connection
 echo "Testing database connection..."
