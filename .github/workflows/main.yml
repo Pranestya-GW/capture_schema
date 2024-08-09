@@ -29,3 +29,12 @@ jobs:
       # Step 4: Run the script
       - name: Run SchemaSpy script
         run: ./generate_schema.sh
+        
+      # Step 5: Commit generated files
+      - name: Commit generated files
+        run: |
+          git add generated/*
+          git commit -m "Update generated schema files" || echo "No changes to commit"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
