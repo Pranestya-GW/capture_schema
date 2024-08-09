@@ -6,9 +6,6 @@ JDBC_DRIVER="${GITHUB_WORKSPACE}/postgresql.jar"
 BASE_OUTPUT_DIR="${GITHUB_WORKSPACE}/generated"
 LOG_FILE="${BASE_OUTPUT_DIR}/schemaspy.log"  # Log file location
 
-# Set the PGPASSWORD environment variable using the repository variable
-export PGPASSWORD="$DB_PASS"
-
 # Generate new output directory with timestamp
 TIMESTAMP=$(date +"%Y-%m-%d-%H:%M")
 NEW_OUTPUT_DIR="${BASE_OUTPUT_DIR}/${TIMESTAMP}"
