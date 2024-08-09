@@ -41,14 +41,3 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           
-       # Step 6: Create Pull Request
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v3
-        with:
-          title: "Update generated schema files"
-          body: "This pull request updates the generated schema files."
-          base: main
-          head: schema-update-branch
-          commit-message: "Update generated schema files"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
