@@ -12,9 +12,9 @@ SchemaSpy comes with ABSOLUTELY NO WARRANTY.
 SchemaSpy is free software and can be redistributed under the conditions of LGPL version 3 or later.
 http://www.gnu.org/licenses/
 
-INFO  - Starting Main v6.2.4 on fv-az1215-702 with PID 4041 (/home/runner/work/capture_schema/capture_schema/schemaspy-6.2.4.jar started by runner in /home/runner/work/capture_schema/capture_schema)
+INFO  - Starting Main v6.2.4 on fv-az1542-358 with PID 4044 (/home/runner/work/capture_schema/capture_schema/schemaspy-6.2.4.jar started by runner in /home/runner/work/capture_schema/capture_schema)
 INFO  - The following profiles are active: default
-INFO  - Started Main in 1.348 seconds (JVM running for 1.903)
+INFO  - Started Main in 1.281 seconds (JVM running for 1.834)
 INFO  - Starting schema analysis
 INFO  - Connected to PostgreSQL - 15.6
 INFO  - Gathering schema details
@@ -32,16 +32,16 @@ INFO  - Writing/graphing summary
 INFO  - Graphviz renderer set to ':cairo'
 ...ERROR - dot -Tpng:cairo orphans.dot -oorphans.png -Tcmapx: Warning: cell size too small for content
 ERROR - dot -Tpng:cairo orphans.dot -oorphans.png -Tcmapx: in label of node tgl
-.....(1sec)
-Writing/diagramming detailsINFO  - Completed summary in 1 seconds
+.....(0sec)
+Writing/diagramming detailsINFO  - Completed summary in 0 seconds
 INFO  - Writing/diagramming details
 ERROR - dot -Tpng:cairo tgl.1degree.dot -otgl.1degree.png -Tcmapx: Warning: cell size too small for content
 ERROR - dot -Tpng:cairo tgl.1degree.dot -otgl.1degree.png -Tcmapx: in label of node tgl
 .(0sec)
-Wrote relationship details of 1 tables/views to directory '/home/runner/work/capture_schema/capture_schema/generated/2024-08-12-09:31' in 8 seconds.
-View the results by opening /home/runner/work/capture_schema/capture_schema/generated/2024-08-12-09:31/index.html
+Wrote relationship details of 1 tables/views to directory '/home/runner/work/capture_schema/capture_schema/generated/2024-08-12-19:29' in 7 seconds.
+View the results by opening /home/runner/work/capture_schema/capture_schema/generated/2024-08-12-19:29/index.html
 INFO  - Wrote table details in 0 seconds
-INFO  - Wrote relationship details of 1 tables/views to directory '/home/runner/work/capture_schema/capture_schema/generated/2024-08-12-09:31' in 8 seconds.
-INFO  - View the results by opening /home/runner/work/capture_schema/capture_schema/generated/2024-08-12-09:31/index.html
+INFO  - Wrote relationship details of 1 tables/views to directory '/home/runner/work/capture_schema/capture_schema/generated/2024-08-12-19:29' in 7 seconds.
+INFO  - View the results by opening /home/runner/work/capture_schema/capture_schema/generated/2024-08-12-19:29/index.html
 INFO  - StackTraces have been omitted, use `-debug` when executing SchemaSpy to see them
-SchemaSpy completed successfully at 2024-08-12 09:31:41
+SchemaSpy completed successfully at 2024-08-12 19:29:44
