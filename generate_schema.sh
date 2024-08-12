@@ -4,7 +4,7 @@
 SCHEMASPY_JAR="${GITHUB_WORKSPACE}/schemaspy-6.2.4.jar"
 JDBC_DRIVER="${GITHUB_WORKSPACE}/postgresql.jar"
 BASE_OUTPUT_DIR="${GITHUB_WORKSPACE}/generated"
-LOG_FILE="${BASE_OUTPUT_DIR}/schemaspy.log"  # Log file location
+LOG_FILE="${BASE_OUTPUT_DIR}/schemaspy.log"  # Log file location.
 
 # Generate new output directory with timestamp
 TIMESTAMP=$(date +"%Y-%m-%d-%H:%M")
