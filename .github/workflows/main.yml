@@ -14,32 +14,40 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Step 2: Run Docker container with the script
-      - name: Run SchemaSpy in Docker
-        env:
-          DB_HOST: ${{ secrets.DB_HOST }}   # Reference secret
-          DB_PORT: ${{ secrets.DB_PORT }}   # Reference secret
-          DB_NAME: ${{ secrets.DB_NAME }}   # Reference secret
-          DB_USER: ${{ secrets.DB_USER }}   # Reference secret
-          DB_PASS: ${{ secrets.DB_PASS }}   # Reference secret
+      # Step 2: Install dependencies
+      - name: Install dependencies
         run: |
-          docker run --rm \
-            -e DB_HOST="${{ secrets.DB_HOST }}" \
-            -e DB_PORT="${{ secrets.DB_PORT }}" \
-            -e DB_NAME="${{ secrets.DB_NAME }}" \
-            -e DB_USER="${{ secrets.DB_USER }}" \
-            -e DB_PASS="${{ secrets.DB_PASS }}" \
-            -v ${{ github.workspace }}:/workspace \
-            anytyng123/java-graphviz-image:latest \
-            /bin/sh /workspace/generate_schema.sh
+          sudo apt-get update
+          sudo apt-get install -y default-jre graphviz
 
-      # Step 3: Commit generated files
-      - name: Commit generated files
+      # Step 3: Make the script executable
+      - name: Make script executable
+        run: chmod +x ./generate_schema.sh
+
+      # Step 4: Run the script
+      - name: Run SchemaSpy script
+        env:
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_PORT: ${{ secrets.DB_PORT }}
+          DB_NAME: ${{ secrets.DB_NAME }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASS: ${{ secrets.DB_PASS }}
+        run: ./generate_schema.sh
+
+      # Step 5: Delete older directories from the repository
+      - name: Delete older schema directories from repository
+        run: |
+          cd generated
+          ls -dt */ | tail -n +8 | xargs -I {} git rm -r {}
+        continue-on-error: false
+
+      # Step 6: Commit changes to the repository
+      - name: Commit and push changes
         run: |
           git config --local user.name "GitHub Actions"
           git config --local user.email "actions@github.com"
-          git add generated/*
-          git commit -m "Update generated schema files" || echo "No changes to commit"
+          git add .
+          git commit -m "Update generated schema files and clean up old backups" || echo "No changes to commit"
           git push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
