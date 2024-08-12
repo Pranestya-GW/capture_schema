@@ -34,7 +34,7 @@ jobs:
           DB_PASS: ${{ secrets.DB_PASS }}
         run: ./generate_schema.sh
 
-      # Step 5: Delete older directories from the repository
+      # Step 5: Delete older directories from the repo
       - name: Delete older schema directories from repository
         run: |
           cd generated
