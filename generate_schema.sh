@@ -58,8 +58,27 @@ LOG_FILE="${OUTPUT_DIR}/schemaspy.log"
 mkdir -p "$OUTPUT_DIR"
 
 # ==========================================================================
-#  2. Download SchemaSpy + JDBC driver (if not present)
+#  2.5 Ensure Java is available (download portable JDK if needed)
 # ==========================================================================
+
+JAVA_BIN=""
+
+if command -v java &>/dev/null; then
+    JAVA_BIN="java"
+    echo -e "${GREEN}✓ Java found: $(java -version 2>&1 | head -1)${NC}"
+elif [ -f "${BASE_DIR}/jdk/bin/java" ]; then
+    JAVA_BIN="${BASE_DIR}/jdk/bin/java"
+    echo -e "${GREEN}✓ Using portable JRE${NC}"
+else
+    echo -e "${YELLOW}Java not found. Downloading portable JRE 11 (~30 MB)...${NC}"
+    JDK_URL="https://api.adoptium.net/v3/binary/latest/11/ga/linux/x64/jre/hotspot/normal/eclipse"
+    mkdir -p "${BASE_DIR}/jdk"
+    curl -L -o "${BASE_DIR}/jdk.tar.gz" "$JDK_URL"
+    tar -xzf "${BASE_DIR}/jdk.tar.gz" -C "${BASE_DIR}/jdk" --strip-components=1
+    rm -f "${BASE_DIR}/jdk.tar.gz"
+    JAVA_BIN="${BASE_DIR}/jdk/bin/java"
+    echo -e "${GREEN}✓ Portable JRE 11 ready${NC}"
+fi
 
 cd "$BASE_DIR"
 
@@ -113,7 +132,7 @@ echo "  Database: $DB_NAME"
 echo "  User: $DB_USER"
 echo ""
 
-java -jar "$SCHEMASPY_JAR" \
+"$JAVA_BIN" -jar "$SCHEMASPY_JAR" \
     -t pgsql \
     -dp "$JDBC_JAR" \
     -host "$DB_HOST" \

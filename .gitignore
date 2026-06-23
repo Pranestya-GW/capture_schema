@@ -1,6 +1,9 @@
 # SchemaSpy JARs (downloaded on-demand — not committed)
 *.jar
 
+# Portable JDK (downloaded on-demand)
+jdk/
+
 # Generated output (committed by CI, ignored locally)
 generated/
 
