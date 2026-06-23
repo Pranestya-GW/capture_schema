@@ -1,0 +1,16 @@
+# SchemaSpy JARs (downloaded on-demand — not committed)
+*.jar
+
+# Generated output (committed by CI, ignored locally)
+generated/
+
+# Environment / secrets
+.env
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
