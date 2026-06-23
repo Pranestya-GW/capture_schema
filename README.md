@@ -51,7 +51,7 @@ Schema Capture uses [SchemaSpy](https://github.com/schemaspy/schemaspy) to analy
 
 ### Prerequisites
 
-- **Java JRE 11+** (`sudo apt install default-jre`)
+- **Java JRE 11+** (auto-downloaded if missing, uses portable JRE 11)
 - **Graphviz** (`sudo apt install graphviz`)
 - **PostgreSQL database** to document
 - **Bash** (Linux, macOS, or WSL)
@@ -70,11 +70,41 @@ chmod +x generate_schema.sh
 ./generate_schema.sh
 ```
 
-The script:
-1. Loads credentials from `.env`
-2. Downloads SchemaSpy + JDBC driver (if not present)
-3. Connects to your database and generates docs
-4. Opens the report in your browser
+The script shows a live progress display:
+
+```
+  [1/5] [####----------------]  20%  Loading configuration
+        ℹ Loaded .env
+        ℹ Output → .../generated
+        ✓ Done in 0s
+
+  [2/5] [########------------]  40%  Preparing Java runtime
+        ℹ Using cached portable JRE 11
+        ✓ Done in 0s
+
+  [3/5] [############--------]  60%  Checking dependencies
+        ℹ SchemaSpy JAR ✓
+        ℹ JDBC driver ✓
+        ℹ Graphviz ✓
+        ✓ Done in 0s
+
+  [4/5] [################----]  80%  Generating schema documentation
+        ℹ Host: localhost:5419  DB: testdb
+        ⠙  Generating schema docs...  00:38
+        ✓  SchemaSpy completed in 00:38
+
+  [5/5] [####################] 100%  Finalizing
+        ℹ Report:  .../generated/2025-06-23-1126/index.html
+        ℹ Log:     .../generated/schemaspy.log
+        ✓ Done in 0s
+
+  ╔═══════════════════════════════════════════════════════╗
+  ║   ✅ Schema documentation generated successfully!    ║
+  ╚═══════════════════════════════════════════════════════╝
+
+  Open:  .../generated/2025-06-23-1126/index.html
+  Latest: .../generated/latest/index.html
+```
 
 ### 3. View
 
@@ -121,22 +151,28 @@ The generated diagram uses Graphviz to draw table relationships:
 ```
 1. generate_schema.sh starts
    │
-   ├── Loads .env (local) or GitHub Secrets (CI)
+   ├── [1/5] Step 1: Load .env + validate credentials
    │
-   ├── Downloads SchemaSpy JAR + PostgreSQL JDBC driver
-   │   (cached — only downloads once)
+   ├── [2/5] Step 2: Prepare Java (uses cached portable JRE 11,
+   │   │            or downloads ~30 MB JRE automatically)
+   │   │
+   │   └── Java binary found → ready
    │
-   ├── Installs Graphviz if missing
+   ├── [3/5] Step 3: Check dependencies
+   │   │   SchemaSpy JAR, JDBC driver, Graphviz
+   │   │   (all cached after first run)
    │
-   ├── Runs SchemaSpy:
-   │   java -jar schemaspy.jar
-   │     -t pgsql              (database type)
-   │     -host / -port / -db    (connection)
-   │     -u / -p               (credentials)
-   │     -s public             (schema)
-   │     -o generated/YYYY-MM-DD-HHMM/
+   ├── [4/5] Step 4: Run SchemaSpy
+   │   │   java -jar schemaspy.jar
+   │   │     -t pgsql              (database type)
+   │   │     -host / -port / -db    (connection)
+   │   │     -u / -p               (credentials)
+   │   │     -s public             (schema)
+   │   │     -o generated/YYYY-MM-DD-HHMM/
+   │   │
+   │   └── Live spinner + timer shows progress
    │
-   ├── Creates generated/latest → symlink to newest
+   ├── [5/5] Step 5: Create symlink + print summary
    │
    └── Opens browser (local only)
 ```
@@ -248,7 +284,14 @@ capture_schema/
 │   └── workflows/
 │       └── main.yml                 # GitHub Actions pipeline
 │
+├── jdk/                             # Portable JRE 11 (auto-downloaded)
+│   └── bin/java                     # Used if no system Java found
+│
+├── schemaspy-6.2.4.jar             # SchemaSpy (auto-downloaded)
+├── postgresql-42.7.3.jar           # JDBC driver (auto-downloaded)
+│
 └── generated/                       # Output directory
+    ├── schemaspy.log                # Run log (overwritten each run)
     ├── 2025-06-23-1430/             # Timestamped reports
     │   ├── index.html               # Main documentation page
     │   ├── tables/                  # Per-table detail pages
@@ -257,7 +300,7 @@ capture_schema/
     └── latest -> 2025-06-23-1430/   # Symlink to newest
 ```
 
-> ⚠ `generated/` is gitignored locally but committed by CI. JARs are downloaded on-demand and never committed.
+> ⚠ `generated/` is gitignored locally but committed by CI. JARs and portable JRE are downloaded on-demand and never committed.
 
 ---
 
@@ -273,6 +316,9 @@ capture_schema/
 | `DB_USER` | _(required)_ | Database user (read-only is fine) |
 | `DB_PASS` | _(required)_ | Database password |
 | `SCHEMASPY_VERSION` | `6.2.4` | SchemaSpy version |
+
+> 💡 The script auto-downloads a portable **JRE 11** (~30 MB) if no system Java is found.
+> JRE 11 is the minimum requirement for SchemaSpy 6.x — lighter and faster than JDK 21.
 
 ### Recommended: Read-Only User
 
@@ -330,7 +376,7 @@ brew install graphviz               # macOS
 
 ### Java version error
 
-SchemaSpy 6.x requires Java 11+. Check your version:
+SchemaSpy 6.x requires Java 11+. The script auto-downloads a portable JRE 11 if no system Java is found.
 
 ```bash
 java -version
@@ -340,6 +386,11 @@ java -version
 ### Empty schema output
 
 SchemaSpy only documents tables in the specified schema. Ensure your tables are in the `public` schema (or change `-s public` in the script).
+
+### Paths with spaces (WSL / Windows)
+
+If your username contains spaces (e.g. `R Y Z E N`), the script handles this automatically.
+All paths are properly quoted — no manual fixes needed.
 
 ### GitHub Actions can't connect
 
